@@ -13,6 +13,7 @@ import cytoscapePopper from 'cytoscape-popper';
 import tippy, {sticky} from 'tippy.js';
 import 'tippy.js/dist/tippy.css';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
+import {MatTooltipModule} from '@angular/material/tooltip';
 
 cytoscape.use(tidytree);
 
@@ -42,14 +43,16 @@ cytoscape.use(cytoscapePopper(popperFactory));
 
 @Component({
     selector: 'app-home',
-    imports: [CommonModule, MatListModule, MatProgressBarModule, MatButtonToggleModule],
+    imports: [CommonModule, MatListModule, MatProgressBarModule, MatButtonToggleModule, MatTooltipModule],
     templateUrl: './home.component.html',
     styleUrl: './home.component.scss'
 })
 export class HomeComponent implements AfterViewInit, OnInit {
+    // Vars
+    loading = true;
+
     // Graph
     graph: any;
-    loading = true;
     createdNodes: any[] = [];
     createdEdges: any[] = [];
     upstreamsWithoutMetadata: any[] = [];
@@ -836,12 +839,12 @@ export class HomeComponent implements AfterViewInit, OnInit {
         console.log('Cojo conectados de: ' + aux.join(', '));
 
         // Reset all
-        this.graph.elements().removeClass('trasparent');
+        this.graph.elements().removeClass(this.globals.prefGraphHideClass);
         this.graph.fit();
 
         if (filterSelection.nonempty()) {
-            // Add "trasparent" class to all nodes not selected
-            filterSelection.absoluteComplement().addClass('trasparent');
+            // Add the hide styles class to all nodes not selected
+            filterSelection.absoluteComplement().addClass(this.globals.prefGraphHideClass);
 
             // Fit graph and flash
             this.graph.fit(filterSelection);
@@ -940,7 +943,5 @@ export class HomeComponent implements AfterViewInit, OnInit {
         this.tippys = [];
         // get data again
         await this.startUp();
-        // reset zoom
-        // this.fitScreen();
     }
 }

@@ -31,6 +31,9 @@ body {
         selected-state-background-color: var(--mat-sys-tertiary),
         selected-state-text-color: #222,
     ));
+    @include mat.dialog-overrides((
+        container-color: #333,
+    ));
 }
 
 // mat-list
@@ -50,6 +53,7 @@ body {
     line-height: 20px !important;
 }
 
+/* TIPPY CUSTOM THEME */
 .tippy-box[data-theme~='tippy-dark'] {
     background-color: rgba(51, 51, 51, .8);
     border: 1px solid rgba(68, 68, 68, .8);
@@ -87,35 +91,3 @@ body {
 .tippy-box[data-theme~='tippy-dark'] > .tippy-svg-arrow {
     fill: rgba(68, 68, 68, .8);
 }
-
-/*
-
-.tippy-box[data-theme~=material] {
-    background-color: #505355;
-    font-weight: 600
-}
-
-.tippy-box[data-theme~=material][data-placement^=top] > .tippy-arrow:before {
-    border-top-color: #505355
-}
-
-.tippy-box[data-theme~=material][data-placement^=bottom] > .tippy-arrow:before {
-    border-bottom-color: #505355
-}
-
-.tippy-box[data-theme~=material][data-placement^=left] > .tippy-arrow:before {
-    border-left-color: #505355
-}
-
-.tippy-box[data-theme~=material][data-placement^=right] > .tippy-arrow:before {
-    border-right-color: #505355
-}
-
-.tippy-box[data-theme~=material] > .tippy-backdrop {
-    background-color: #505355
-}
-
-.tippy-box[data-theme~=material] > .tippy-svg-arrow {
-    fill: #505355
-}
-*/

@@ -5,6 +5,8 @@ import {Subject} from 'rxjs';
     providedIn: 'root'
 })
 export class GlobalsService {
+    private _MSG = new Subject();
+
     private _APISIX_URL = 'http://localhost:3000/api';
 
     get APISIX_URL(): string {
@@ -38,11 +40,7 @@ export class GlobalsService {
             -0.7, 0.8,
             -1, 0.8
         ]
-        //M -10 8 L -10 5 L -8 5 L -3 -8 L 2 5 L 7 -6
-        // L 7 -8 L 10 -8 L 10 -5 L 8 -5 L 2 8
-        // L -3 -5 L -7 6 L -7 8 L -10 8
     };
-
 
     get GRAPH_SHAPES(): any {
         return this._GRAPH_SHAPES;
@@ -125,11 +123,16 @@ export class GlobalsService {
             }
         },
         {
-            "selector": "*.trasparent",
+            "selector": "*.transparent",
             "style": {
-                "background-color": "#0000ff",
+                "background-color": "#777",
                 "opacity": 0.2
-                // "display": "none"
+            }
+        },
+        {
+            "selector": "*.hidden",
+            "style": {
+                "display": "none"
             }
         },
         {
@@ -144,14 +147,11 @@ export class GlobalsService {
                 "width": 25,
                 "curve-style": "haystack",
                 "haystack-radius": 0,
-                // "line-color": "#0cc",
                 "line-style": "dotted",
                 "line-opacity": 0.5,
                 "line-outline-width": 5,
                 "line-outline-color": "#999",
-                "line-fill": "linear-gradient",
-                // "target-arrow-color": "#ccc",
-                // "target-arrow-shape": "triangle"
+                "line-fill": "linear-gradient"
             }
         },
         {
@@ -246,7 +246,16 @@ export class GlobalsService {
         return this._ICON_GITHUB;
     }
 
-    private _MSG = new Subject();
+    // PREF: style for not selected nodes in the graph (transparent | hidden)
+    private _prefGraphHideClass: string = 'transparent';
+
+    get prefGraphHideClass(): string {
+        return this._prefGraphHideClass;
+    }
+
+    set prefGraphHideClass(value: string) {
+        this._prefGraphHideClass = value;
+    }
 
     getMSG(): Subject<any> {
         return this._MSG;
