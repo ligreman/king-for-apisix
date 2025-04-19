@@ -1,0 +1,34 @@
+<div class="container">
+    <div id="services">
+        <div class="services-header">
+            <span class="title">Filter by service or route</span>
+
+            <mat-button-toggle-group name="filters" aria-label="Filters"
+                                     [hideMultipleSelectionIndicator]="true" multiple>
+                <mat-button-toggle value="r" class="toggler" title="Show or hide Route filters" checked>R
+                </mat-button-toggle>
+                <mat-button-toggle value="s" class="toggler" title="Show or hide Service filters" checked>S
+                </mat-button-toggle>
+            </mat-button-toggle-group>
+        </div>
+
+        <mat-selection-list #seloptions class="sel-list"
+                            (selectionChange)="selectionChange(seloptions.selectedOptions.selected)">
+            @for (option of optionsList; track option) {
+                <mat-list-option value="{{ option.id }}" class="sel-option {{option.kind}}">
+                    <span matListItemTitle>{{ option.name }}</span>
+                    <span matListItemLine class="opt-line">{{ option.desc }}</span>
+                </mat-list-option>
+            }
+        </mat-selection-list>
+    </div>
+    <div id="graph">
+    </div>
+</div>
+
+<div class="loadbar" [ngClass]="{'hidden': !loading}">
+    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+    <div class="loading">
+        <p>Loading . . .</p>
+    </div>
+</div>

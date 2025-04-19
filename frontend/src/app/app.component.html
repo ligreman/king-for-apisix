@@ -1,0 +1,25 @@
+<mat-toolbar id="header-container">
+    <button mat-icon-button color="accent" aria-label="Filter graph">
+        <mat-icon>filter_alt</mat-icon>
+    </button>
+    <span class="title">KApisix - King for Apisix</span>
+    <span class="spacer"></span>
+    <button mat-icon-button aria-label="Reset view" title="Reset graph zoom and position" (click)="fitScreen()">
+        <mat-icon>fit_screen</mat-icon>
+    </button>
+    <button mat-icon-button aria-label="Reload data" title="Reload graph data" (click)="reloadData()">
+        <mat-icon>refresh</mat-icon>
+    </button>
+    <button mat-icon-button aria-label="Help" (click)="help()">
+        <mat-icon>help</mat-icon>
+    </button>
+    <button mat-icon-button aria-label="Settings" title="Settings" (click)="settings()">
+        <mat-icon>settings</mat-icon>
+    </button>
+    <a mat-icon-button aria-label="GitHub" title="Project Github repository" target="_blank"
+       href="https://github.com/ligreman/king-for-apisix">
+        <mat-icon svgIcon="i-github" class="icon24"></mat-icon>
+    </a>
+</mat-toolbar>
+
+<router-outlet/>

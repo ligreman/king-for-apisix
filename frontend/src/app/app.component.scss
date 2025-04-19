@@ -1,0 +1,22 @@
+@use '@angular/material' as mat;
+
+// Customize the entire app. Change :root to your selector if you want to scope the styles.
+#header-container {
+    height: 7vh;
+    position: relative;
+    z-index: 10;
+    box-shadow: var(--mat-sys-level1);
+}
+
+.spacer {
+    flex: 1 1 auto;
+}
+
+span.title {
+    margin-left: 10px;
+}
+
+.icon24 svg, .icon24 {
+    width: auto;
+    height: 24px !important;
+}

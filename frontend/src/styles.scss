@@ -1,0 +1,121 @@
+/* You can add global styles to this file, and also import other style files */
+@use '@angular/material' as mat;
+
+html {
+    & {
+        color-scheme: light dark;
+        height: 100%;
+    }
+
+    @include mat.theme((
+        color: mat.$cyan-palette,
+        typography: Roboto,
+        density: 0
+    ));
+}
+
+body {
+    height: 100%;
+    background: var(--mat-sys-surface);
+    color: var(--mat-sys-on-surface);
+    margin: 0;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+// Override styles
+:root {
+    @include mat.toolbar-overrides((
+        container-background-color: var(--mat-sys-primary-container),
+    ));
+    @include mat.button-toggle-overrides((
+        selected-state-background-color: var(--mat-sys-tertiary),
+        selected-state-text-color: #222,
+    ));
+}
+
+// mat-list
+.sel-option span.mat-mdc-list-item-title.mdc-list-item__primary-text {
+    margin-bottom: -25px !important;
+}
+
+.sel-option.mdc-list-item--with-trailing-checkbox .mdc-list-item__end {
+    margin-left: 10px !important;
+}
+
+.sel-option.mdc-list-item--with-two-lines .mdc-list-item__primary-text::before {
+    height: 23px !important;
+}
+
+.mat-button-toggle-appearance-standard.toggler .mat-button-toggle-label-content {
+    line-height: 20px !important;
+}
+
+.tippy-box[data-theme~='tippy-dark'] {
+    background-color: rgba(51, 51, 51, .8);
+    border: 1px solid rgba(68, 68, 68, .8);
+}
+
+.tippy-box[data-theme~='tippy-dark'] > .tippy-arrow {
+    width: 14px;
+    height: 14px;
+}
+
+.tippy-box[data-theme~='tippy-dark'][data-placement^=top] > .tippy-arrow:before {
+    border-width: 7px 7px 0;
+    border-top-color: rgba(68, 68, 68, .8);
+}
+
+.tippy-box[data-theme~='tippy-dark'][data-placement^=bottom] > .tippy-arrow:before {
+    border-width: 0 7px 7px;
+    border-bottom-color: rgba(68, 68, 68, .8);
+}
+
+.tippy-box[data-theme~='tippy-dark'][data-placement^=left] > .tippy-arrow:before {
+    border-width: 7px 0 7px 7px;
+    border-left-color: rgba(68, 68, 68, .8);
+}
+
+.tippy-box[data-theme~='tippy-dark'][data-placement^=right] > .tippy-arrow:before {
+    border-width: 7px 7px 7px 0;
+    border-right-color: rgba(68, 68, 68, .8);
+}
+
+.tippy-box[data-theme~='tippy-dark'] > .tippy-backdrop {
+    background-color: rgba(68, 68, 68, .8);
+}
+
+.tippy-box[data-theme~='tippy-dark'] > .tippy-svg-arrow {
+    fill: rgba(68, 68, 68, .8);
+}
+
+/*
+
+.tippy-box[data-theme~=material] {
+    background-color: #505355;
+    font-weight: 600
+}
+
+.tippy-box[data-theme~=material][data-placement^=top] > .tippy-arrow:before {
+    border-top-color: #505355
+}
+
+.tippy-box[data-theme~=material][data-placement^=bottom] > .tippy-arrow:before {
+    border-bottom-color: #505355
+}
+
+.tippy-box[data-theme~=material][data-placement^=left] > .tippy-arrow:before {
+    border-left-color: #505355
+}
+
+.tippy-box[data-theme~=material][data-placement^=right] > .tippy-arrow:before {
+    border-right-color: #505355
+}
+
+.tippy-box[data-theme~=material] > .tippy-backdrop {
+    background-color: #505355
+}
+
+.tippy-box[data-theme~=material] > .tippy-svg-arrow {
+    fill: #505355
+}
+*/

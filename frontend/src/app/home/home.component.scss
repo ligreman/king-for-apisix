@@ -1,0 +1,107 @@
+@use '@angular/material' as mat;
+
+.container {
+    display: flex;
+    flex-direction: row;
+    height: 93vh;
+}
+
+#services {
+    flex: 25%;
+    background-color: #333;
+    overflow-y: auto;
+    z-index: 5;
+}
+
+#graph {
+    flex: 75%;
+    background-color: #222222;
+}
+
+.loadbar {
+    background-color: #222222;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    height: 93vh;
+    width: 75%;
+    opacity: .5;
+    z-index: 999;
+}
+
+.loadbar.hidden {
+    display: none;
+}
+
+.loading {
+    height: 80vh;
+    display: flex;
+}
+
+.loading p {
+    align-self: center;
+    width: 100%;
+    text-align: center;
+    font-size: 2rem;
+}
+
+p.title {
+    //text-align: center;
+    //border-bottom: 2px solid #555;
+    background-color: #006A6A;
+    padding: 8px 0 8px 16px;
+    margin: 0;
+    position: sticky;
+    top: 0;
+    z-index: 9;
+    box-shadow: var(--mat-sys-level4);
+}
+
+.services-header {
+    background-color: #006A6A;
+    position: sticky;
+    top: 0;
+    z-index: 9;
+    box-shadow: var(--mat-sys-level4);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 12px 8px;
+}
+
+.services-header .title {
+    flex: 50;
+}
+
+.sel-list {
+    padding: 0;
+}
+
+.sel-option {
+    height: 50px !important;
+    padding-left: 8px !important;
+    border-left: 8px solid;
+}
+
+.sel-option.service {
+    border-color: #6CC870;
+}
+
+.sel-option.route {
+    border-color: #4FC3F7;
+}
+
+.opt-line {
+    font-style: italic;
+    font-size: 0.8rem;
+    color: #999;
+}
+
+/* makes sticky faster; disable if you want animated tippies */
+.tippy-popper {
+    transition: none !important;
+}
+
+.card-header {
+    color:red !important;
+}
