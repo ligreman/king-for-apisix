@@ -36,11 +36,9 @@ COPY --chown=node:node api/routes api/app.js api/utils.js $APP_HOME/api/
 # Copy /usr/bin/dumb-init, node and the entrypoint
 COPY --chown=node:node --from=builder /usr/bin/dumb-init /usr/bin/dumb-init
 COPY --from=builder /usr/local/bin/node /usr/local/bin/
-COPY --chown=node:node node-entrypoint.sh /usr/local/bin/node-entrypoint.sh
-RUN chmod 0550 /usr/local/bin/node-entrypoint.sh
 
 USER node
 EXPOSE 8080
 
-ENTRYPOINT ["/usr/local/bin/node-entrypoint.sh"]
-CMD ["/usr/bin/dumb-init", "--", "node", "--use_strict", "src/server.js"]
+ENTRYPOINT ["/usr/bin/dumb-init"]
+CMD ["--", "node", "--use_strict", "src/server.js"]
