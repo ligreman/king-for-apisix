@@ -28,7 +28,7 @@
     z-index: 999;
 }
 
-.loadbar.hidden {
+.hidden {
     display: none;
 }
 
@@ -82,6 +82,14 @@ p.title {
     border-left: 8px solid;
 }
 
+.sel-option.thin {
+    height: 36px !important;
+}
+
+.sel-option.min {
+    height: 30px !important;
+}
+
 .sel-option.service {
     border-color: #6CC870;
 }
@@ -90,10 +98,15 @@ p.title {
     border-color: #4FC3F7;
 }
 
-.opt-line {
+.sel-option .opt-line {
     font-style: italic;
     font-size: 0.8rem;
     color: #999;
+    padding-left: 5px;
+}
+
+.sel-option.thin .opt-line, .sel-option.min .opt-line {
+    display: none;
 }
 
 /* makes sticky faster; disable if you want animated tippies */
@@ -102,5 +115,5 @@ p.title {
 }
 
 .card-header {
-    color:red !important;
+    color: red !important;
 }

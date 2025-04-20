@@ -1,8 +1,9 @@
 <mat-toolbar id="header-container">
-    <button mat-icon-button color="accent" aria-label="Filter graph">
-        <mat-icon>filter_alt</mat-icon>
-    </button>
-    <span class="title">KApisix - King for Apisix</span>
+    <img class="logo" src="favicon-64x64.png" alt="" matTooltip="Roar!" matTooltipShowDelay="3000"/>
+    <div class="band">
+        <span class="title">KApisix</span>
+        <span class="subtitle">King for Apisix</span>
+    </div>
     <span class="spacer"></span>
     <button mat-icon-button aria-label="Reset view" matTooltip="Reset graph zoom and position" (click)="fitScreen()">
         <mat-icon>fit_screen</mat-icon>
@@ -10,13 +11,18 @@
     <button mat-icon-button aria-label="Reload data" matTooltip="Reload graph data" (click)="reloadData()">
         <mat-icon>refresh</mat-icon>
     </button>
-    <button mat-icon-button aria-label="Help" (click)="help()">
+
+    <span class="divider"></span>
+
+    <button mat-icon-button aria-label="User guide" matTooltip="User guide" (click)="help()">
         <mat-icon>help</mat-icon>
     </button>
     <button mat-icon-button aria-label="Settings" matTooltip="Settings" (click)="settings()">
         <mat-icon>settings</mat-icon>
     </button>
-    <mat-divider [vertical]="true"></mat-divider>
+
+    <span class="divider"></span>
+
     <a mat-icon-button aria-label="GitHub" matTooltip="Project Github repository" target="_blank"
        href="https://github.com/ligreman/king-for-apisix">
         <mat-icon svgIcon="i-github" class="icon24"></mat-icon>

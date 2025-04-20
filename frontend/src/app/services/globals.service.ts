@@ -257,11 +257,32 @@ export class GlobalsService {
         this._prefGraphHideClass = value;
     }
 
+    private _prefShowPlugins: boolean = true;
+
+    get prefShowPlugins(): boolean {
+        return this._prefShowPlugins;
+    }
+
+    set prefShowPlugins(value: boolean) {
+        this._prefShowPlugins = value;
+    }
+
     getMSG(): Subject<any> {
         return this._MSG;
     }
 
     setMSG(data: any) {
         this._MSG.next(data);
+    }
+
+    // full | thin | min
+    private _prefFiltersSize: string = 'full';
+
+    get prefFiltersSize(): string {
+        return this._prefFiltersSize;
+    }
+
+    set prefFiltersSize(value: string) {
+        this._prefFiltersSize = value;
     }
 }

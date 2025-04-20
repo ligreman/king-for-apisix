@@ -14,8 +14,13 @@ import tippy, {sticky} from 'tippy.js';
 import 'tippy.js/dist/tippy.css';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
 import {MatTooltipModule} from '@angular/material/tooltip';
+import {FormControl, ReactiveFormsModule} from '@angular/forms';
+import {MatIconModule} from '@angular/material/icon';
+import {MatButtonModule} from '@angular/material/button';
 
 cytoscape.use(tidytree);
+
+// TODO Ayuda
 
 function popperFactory(ref: any, content: any, opts: any) {
     // Since tippy constructor requires DOM element/elements, create a placeholder
@@ -43,13 +48,18 @@ cytoscape.use(cytoscapePopper(popperFactory));
 
 @Component({
     selector: 'app-home',
-    imports: [CommonModule, MatListModule, MatProgressBarModule, MatButtonToggleModule, MatTooltipModule],
+    imports: [CommonModule, MatListModule, MatProgressBarModule, MatButtonToggleModule, MatTooltipModule, ReactiveFormsModule, MatButtonModule, MatIconModule],
     templateUrl: './home.component.html',
     styleUrl: './home.component.scss'
 })
 export class HomeComponent implements AfterViewInit, OnInit {
+    showFilter = new FormControl(['route', 'service']);
+    selection = new FormControl();
+
     // Vars
-    loading = true;
+    loading: boolean = true;
+    showRoutes: boolean = true;
+    showServices: boolean = true;
 
     // Graph
     graph: any;
@@ -58,15 +68,12 @@ export class HomeComponent implements AfterViewInit, OnInit {
     upstreamsWithoutMetadata: any[] = [];
     data: any = {};
     optionsList: any = [];
-    selection: any = [];
     pluginList: any = [];
     maxSpacingFactor: number = 1;
     tippys: any[] = [];
 
     constructor(private api: ApiService, private toast: ToastService, private globals: GlobalsService) {
     }
-
-    // TODO opciones configurables: separación entre nodos, ¿diferentes visualizaciones de edges?, ¿Modo light/dark?, al filtrar ocultar o solo trasparencia
 
     ngOnInit(): void {
         this.globals.getMSG().subscribe(async (data) => {
@@ -78,7 +85,7 @@ export class HomeComponent implements AfterViewInit, OnInit {
                     await this.reloadData();
                     break;
             }
-        })
+        });
     }
 
     ngAfterViewInit(): void {
@@ -99,7 +106,10 @@ export class HomeComponent implements AfterViewInit, OnInit {
         const ss = this.createServices();
         const rr = this.createRoutes();
         elements = elements.concat(ss, rr, uu);
-        elements = elements.concat(this.createPlugins());
+
+        if (this.globals.prefShowPlugins) {
+            elements = elements.concat(this.createPlugins());
+        }
         this.loading = false;
 
         console.log(elements);
@@ -233,19 +243,6 @@ export class HomeComponent implements AfterViewInit, OnInit {
 
         });
     }
-
-    // processData() {
-    //     return '';
-    // }
-
-    // createNodesAndEdges() {
-    //     let elements: any = [];
-    //     elements.concat(this.createServices(), this.createRoutes());
-    //
-    //     console.log(elements);
-    //     return elements;
-    // }
-
 
     /**
      Create nodes + edges for each Service
@@ -764,65 +761,6 @@ export class HomeComponent implements AfterViewInit, OnInit {
         return txt.substring(txt.length - 5);
     }
 
-    traversingTest(option: MatListOption[], selection: any) {
-        let sss = '';
-        for (let opt of option) {
-            if (opt.selected) {
-                console.log('Selected: ' + opt.value);
-                sss = '#s-' + opt.value;
-            }
-        }
-
-        let a = this.graph.$(sss);
-        console.log('Open vecinos');
-        let n = a.neighborhood(function (ele: any) {
-            return ele.isNode();
-        });
-        n.forEach((no: any) => {
-            console.log('    ' + no.data().name);
-        });
-        console.log('Close vecinos');
-        let n2 = a.closedNeighborhood(function (ele: any) {
-            return ele.isNode();
-        });
-        n2.forEach((no: any) => {
-            console.log('    ' + no.data().name);
-        });
-        console.log('Componentes');
-        let cc = a.components();
-        cc.forEach((no: any) => {
-            console.log('    ' + no.data().name);
-        });
-
-        console.log('Incomers');
-        let cc3 = a.incomers(function (ele: any) {
-            return ele.isNode();
-        });
-        cc3.forEach((no: any) => {
-            console.log('    ' + no.data().name);
-        });
-        console.log('Outgoers');
-        let cc4 = a.outgoers(function (ele: any) {
-            return ele.isNode();
-        });
-        cc4.forEach((no: any) => {
-            console.log('    ' + no.data().name);
-        });
-        console.log('Succesors');
-        let cc5 = a.successors(function (ele: any) {
-            return ele.isNode();
-        });
-        cc5.forEach((no: any) => {
-            console.log('    ' + no.data().name);
-        });
-        console.log('Predecesor');
-        let cc6 = a.predecessors(function (ele: any) {
-            return ele.isNode();
-        });
-        cc6.forEach((no: any) => {
-            console.log('    ' + no.data().name);
-        });
-    }
 
     selectionChange(selected: any) {
         // Empty collection
@@ -839,7 +777,7 @@ export class HomeComponent implements AfterViewInit, OnInit {
         console.log('Cojo conectados de: ' + aux.join(', '));
 
         // Reset all
-        this.graph.elements().removeClass(this.globals.prefGraphHideClass);
+        this.graph.elements().removeClass(['transparent', 'hidden']);
         this.graph.fit();
 
         if (filterSelection.nonempty()) {
@@ -848,49 +786,7 @@ export class HomeComponent implements AfterViewInit, OnInit {
 
             // Fit graph and flash
             this.graph.fit(filterSelection);
-            // filterSelection.flashClass('flash', 100);
         }
-        /*
-                for (let opt of option) {
-                    if (opt.selected) {
-                        console.log(opt.value)
-                    }
-                }
-
-                this.selection = [];
-                let txt = [];
-                for (let opt of selected) {
-                    this.selection.push(opt.id);
-                    if (opt.selected) {
-                        txt.push(opt.value);
-                    }
-                }
-                console.log('Seleccionados: ' + txt.join(', '));*/
-        /*
-                // let a = this.graph.$('#s-561958100098089675');
-                let a = this.graph.getElementById('s-561958100098089675');
-                // let b = this.graph.$('#s-562108275777077978');
-                let b = this.graph.getElementById('s-562108275777077978');
-                console.log(a);
-                // this.graph.fit(this.graph.collection([a,b]));
-
-                // Cojo predecesores y sucesores
-                let pre = a.predecessors(function (ele: any) {
-                    return ele.isEdge();
-                });
-                let suc = a.successors(function (ele: any) {
-                    return ele.isEdge();
-                });
-                console.log(pre);
-                console.log(suc);
-                // Fusiono las colecciones para tener una sola y pasarla al fit
-                let final = pre.union(a).union(suc);
-                this.graph.fit(final);
-                console.log(final.classes());
-                final.flashClass('flash', 2500);
-
-                // cy.center([eles])
-                // cy.fit([eles])*/
     }
 
     getAllConnected(nodeId: string) {
@@ -937,11 +833,39 @@ export class HomeComponent implements AfterViewInit, OnInit {
         this.upstreamsWithoutMetadata = [];
         this.data = {};
         this.optionsList = [];
-        this.selection = [];
+        this.selection.setValue([]);
         this.pluginList = [];
         this.maxSpacingFactor = 1;
         this.tippys = [];
         // get data again
         await this.startUp();
     }
+
+    hideFilter(kind: string) {
+        let res: boolean = false;
+        if (kind === 'service' && !this.showServices) {
+            res = true;
+        }
+        if (kind === 'route' && !this.showRoutes) {
+            res = true;
+        }
+        return res;
+    }
+
+    changeFilter() {
+        if (this.showFilter.value) {
+            this.showRoutes = this.showFilter.value.includes('route') ? true : false;
+            this.showServices = this.showFilter.value.includes('service') ? true : false;
+        }
+    }
+
+    filtersSize(size: string) {
+        return this.globals.prefFiltersSize === size;
+    }
+
+    cleanFilters() {
+        this.selection.setValue([]);
+        this.selectionChange([]);
+    }
 }
+

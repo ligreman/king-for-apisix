@@ -3,19 +3,26 @@
         <div class="services-header">
             <span class="title">Filter by service or route</span>
 
-            <mat-button-toggle-group name="filters" aria-label="Filters"
-                                     [hideMultipleSelectionIndicator]="true" multiple>
-                <mat-button-toggle value="r" class="toggler" matTooltip="Show or hide Route filters" checked>R
+            <mat-button-toggle-group name="filters" aria-label="Filters" [formControl]="showFilter"
+                                     (change)="changeFilter()" [hideMultipleSelectionIndicator]="true" multiple>
+                <mat-button-toggle value="service" class="toggler"
+                                   [matTooltip]="showServices ? 'Hide Service filters' : 'Show Service filters'">S
                 </mat-button-toggle>
-                <mat-button-toggle value="s" class="toggler" matTooltip="Show or hide Service filters" checked>S
+                <mat-button-toggle value="route" class="toggler"
+                                   [matTooltip]="showServices ? 'Hide Route filters' : 'Show Route filters'">R
                 </mat-button-toggle>
             </mat-button-toggle-group>
+            <button mat-icon-button (click)="cleanFilters()" matTooltip="Clean filters">
+                <mat-icon>cleaning_services</mat-icon>
+            </button>
         </div>
 
-        <mat-selection-list #seloptions class="sel-list"
+        <mat-selection-list #seloptions class="sel-list" [formControl]="selection" name="selection"
                             (selectionChange)="selectionChange(seloptions.selectedOptions.selected)">
             @for (option of optionsList; track option) {
-                <mat-list-option value="{{ option.id }}" class="sel-option {{option.kind}}">
+                <mat-list-option [value]="option.id" class="sel-option {{option.kind}}"
+                                 [matTooltip]="option.desc" matTooltipPosition="right"
+                                 [ngClass]="{'hidden': hideFilter(option.kind), 'thin': filtersSize('thin'), 'min': filtersSize('min')}">
                     <span matListItemTitle>{{ option.name }}</span>
                     <span matListItemLine class="opt-line">{{ option.desc }}</span>
                 </mat-list-option>

@@ -1,5 +1,9 @@
 @use '@angular/material' as mat;
 
+.logo {
+    width: 40px;
+}
+
 // Customize the entire app. Change :root to your selector if you want to scope the styles.
 #header-container {
     height: 7vh;
@@ -12,11 +16,50 @@
     flex: 1 1 auto;
 }
 
+#header-container button {
+    margin-right: 5px;
+}
+
+.divider {
+    width: 1px;
+    background: #F5F5F5;
+    height: 65%;
+    margin: 0 10px 0 5px;
+}
+
+.band {
+    display:flex;
+    flex-direction: row;
+    align-items: baseline;
+    padding-top: 10px;
+}
+
 span.title {
     margin-left: 10px;
+    font-variant: small-caps;
+    font-weight: bold;
+    font-size: 1.7em;
+}
+
+span.subtitle {
+    font-size: 0.8em;
+    font-weight: normal;
+    font-style: italic;
+    opacity: 0.8;
+    margin-left: 15px;
+    font-variant: small-caps;
 }
 
 .icon24 svg, .icon24 {
     width: auto;
     height: 24px !important;
 }
+
+// PREFERENCES DIALOG
+.pref-radio-group {
+    display: flex;
+    flex-direction: column;
+    margin: 0 0 15px 15px;
+    align-items: flex-start;
+}
+
