@@ -129,7 +129,6 @@ export class AppComponent implements OnInit {
         });
     }
 
-    // TODO opciones configurables: separación entre nodos, ¿diferentes visualizaciones de edges?, ¿Modo light/dark?
 }
 
 

@@ -78,10 +78,14 @@ export class GlobalsService {
                 "border-width": 5,
                 "border-color": "#222",
                 "shape": "round-tag"
-                // "border-position": "outside",
-                // "border-color": "#0288D1",
                 // "shape": "polygon",
                 // "shape-polygon-points": this._GRAPH_SHAPES.route
+            }
+        },
+        {
+            "selector": "node[kind = 'route'][!status]",
+            "style": {
+                "background-color": "#838788"
             }
         },
         {
@@ -107,7 +111,7 @@ export class GlobalsService {
             }
         },
         {
-            "selector": "node[kind = 'plugin'][!state]",
+            "selector": "node[kind = 'plugin'][!status]",
             "style": {
                 "border-color": "#D32F2F"
             }

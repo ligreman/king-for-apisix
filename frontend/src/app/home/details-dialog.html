@@ -1,0 +1,9 @@
+<h2 mat-dialog-title><span class="capital">{{ data.kind }}</span> information
+    <button mat-icon-button mat-dialog-close class="dialog-close-btn">
+        <mat-icon>close</mat-icon>
+    </button>
+</h2>
+<mat-dialog-content class="mat-typography margin-bottom-20">
+    <p><a mat-button [href]="url">{{url}}</a></p>
+    <div [innerHTML]="jsonHtml"></div>
+</mat-dialog-content>

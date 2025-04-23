@@ -31,7 +31,7 @@ router.get('/routes', async function (req, res, next) {
             'priority': 0,
             'update_time': 1744534729,
             'id': '561958181249483467',
-            'uri': '/prueba/*'
+            'uris': ['/prueba/*', '/oooo/*']
         },
         'has_domain': false
     }, {
@@ -43,7 +43,7 @@ router.get('/routes', async function (req, res, next) {
         'value': {
             'create_time': 1744483296,
             'name': 'route-up',
-            'status': 1,
+            'status': 0,
             'plugins': {
                 'proxy-rewrite': {
                     'regex_uri': ['/control/(.*)/', '/$1/'],
@@ -406,7 +406,41 @@ router.get('/upstreams', async function (req, res, next) {
             'update_time': 1744650750,
             'timeout': {'send': 6, 'connect': 6, 'read': 6},
             'type': 'roundrobin',
-            'id': '562112014311228122'
+            'id': '562112014311228122',
+            "checks": {
+                "passive": {
+                    "healthy": {
+                        "successes": 5,
+                        "http_statuses": [200, 201, 202, 203, 204, 205, 206, 207, 208, 226, 300, 301, 302, 303, 304, 305, 306, 307, 308]
+                    },
+                    "type": "http",
+                    "unhealthy": {
+                        "http_statuses": [429, 500, 503],
+                        "http_failures": 2,
+                        "tcp_failures": 2,
+                        "timeouts": 7
+                    }
+                },
+                "active": {
+                    "concurrency": 10,
+                    "http_path": "/",
+                    "timeout": 1,
+                    "healthy": {
+                        "successes": 2,
+                        "interval": 1,
+                        "http_statuses": [200, 302]
+                    },
+                    "type": "http",
+                    "unhealthy": {
+                        "interval": 1,
+                        "http_statuses": [429, 404, 500, 501, 502, 503, 504, 505],
+                        "http_failures": 5,
+                        "tcp_failures": 2,
+                        "timeouts": 3
+                    },
+                    "https_verify_certificate": true
+                }
+            }
         },
         'has_domain': true
     }];

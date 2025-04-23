@@ -53,6 +53,25 @@ body {
     line-height: 20px !important;
 }
 
+
+.dialog-close-btn {
+    float: right;
+    top: 10px;
+    right: 10px;
+}
+
+.margin-bottom-20 {
+    margin-bottom: 20px !important;
+}
+
+.capital {
+    text-transform: capitalize;
+}
+
+.hand {
+    cursor: pointer;
+}
+
 /* TIPPY CUSTOM THEME */
 .tippy-box[data-theme~='tippy-dark'] {
     background-color: rgba(51, 51, 51, .8);
@@ -90,4 +109,99 @@ body {
 
 .tippy-box[data-theme~='tippy-dark'] > .tippy-svg-arrow {
     fill: rgba(68, 68, 68, .8);
+}
+
+.tip p {
+    margin: 0 0 5px 0;
+}
+
+.tip p strong {
+    font-size: 1.1em;
+}
+
+.tip p em {
+    color: #c3c3c3;
+    font-size: 0.9em;
+}
+
+.tip ul {
+    padding-left: 20px;
+    margin: 0 0 5px 0;
+}
+
+.tip span.status-ok {
+    color: #4fc354;
+}
+
+.tip span.status-fail {
+    color: #ec3e3e;
+}
+
+/* JSON VIEWER */
+.json {
+    font-family: 'Source Code Pro', monospace;
+    font-size: 16px;
+
+    & > {
+        .json__item {
+            display: block;
+        }
+    }
+}
+
+.json__item {
+    display: block;
+    margin-top: 10px;
+    padding-left: 20px;
+    user-select: none;
+}
+
+.json__item--collapsible {
+    overflow: hidden;
+    position: relative;
+
+    &::before {
+        content: '⌐';
+        position: absolute;
+        left: 5px;
+    }
+
+    &::after {
+        background-color: lightgrey;
+        content: '';
+        height: 100%;
+        left: 9px;
+        position: absolute;
+        top: 26px;
+        width: 1px;
+    }
+}
+
+.json__key {
+    color: #F5F5F5;
+    display: inline;
+
+    &::after {
+        content: ': ';
+    }
+}
+
+.json__value {
+    display: inline;
+}
+
+.json__value--string {
+    color: #5dea5d;
+}
+
+.json__value--number {
+    color: #76c5ef;
+}
+
+.json__value--boolean {
+    color: #d67878;
+}
+
+.json__value--type-object {
+    color: #555555;
 }

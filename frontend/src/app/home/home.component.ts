@@ -1,6 +1,6 @@
-import {AfterViewInit, Component, OnInit} from '@angular/core';
+import {AfterViewInit, ChangeDetectionStrategy, Component, Inject, inject, OnInit} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {MatListModule, MatListOption} from '@angular/material/list';
+import {MatListModule} from '@angular/material/list';
 import {MatProgressBarModule} from '@angular/material/progress-bar';
 import {forkJoin} from 'rxjs';
 import cytoscape from 'cytoscape';
@@ -17,6 +17,8 @@ import {MatTooltipModule} from '@angular/material/tooltip';
 import {FormControl, ReactiveFormsModule} from '@angular/forms';
 import {MatIconModule} from '@angular/material/icon';
 import {MatButtonModule} from '@angular/material/button';
+import {JsonService} from '../services/json.service';
+import {MAT_DIALOG_DATA, MatDialog, MatDialogModule} from '@angular/material/dialog';
 
 cytoscape.use(tidytree);
 
@@ -26,7 +28,7 @@ function popperFactory(ref: any, content: any, opts: any) {
     // Since tippy constructor requires DOM element/elements, create a placeholder
     return tippy(document.createElement('div'), {
         getReferenceClientRect: ref.getBoundingClientRect,
-        trigger: 'manual', // mandatory
+        trigger: 'manual',
 
         // dom element inside the tippy:
         content: content,
@@ -35,9 +37,10 @@ function popperFactory(ref: any, content: any, opts: any) {
         placement: 'bottom',
         hideOnClick: false,
         sticky: true,
-        theme: 'tippy-dark',
+        allowHTML: true,
 
         // if interactive:
+        theme: 'tippy-dark',
         interactive: false,
         appendTo: document.body, // or append dummyDomEle to document.body
         plugins: [sticky]
@@ -53,6 +56,8 @@ cytoscape.use(cytoscapePopper(popperFactory));
     styleUrl: './home.component.scss'
 })
 export class HomeComponent implements AfterViewInit, OnInit {
+    readonly dialog = inject(MatDialog);
+
     showFilter = new FormControl(['route', 'service']);
     selection = new FormControl();
 
@@ -71,8 +76,9 @@ export class HomeComponent implements AfterViewInit, OnInit {
     pluginList: any = [];
     maxSpacingFactor: number = 1;
     tippys: any[] = [];
+    graphDOM:any;
 
-    constructor(private api: ApiService, private toast: ToastService, private globals: GlobalsService) {
+    constructor(private api: ApiService, private toast: ToastService, private globals: GlobalsService, private jsonUtils: JsonService) {
     }
 
     ngOnInit(): void {
@@ -113,9 +119,9 @@ export class HomeComponent implements AfterViewInit, OnInit {
         this.loading = false;
 
         console.log(elements);
-        const container = document.getElementById('graph');
+        this.graphDOM = document.getElementById('graph');
         this.graph = cytoscape({
-            container: container,
+            container: this.graphDOM,
             elements: elements,
             wheelSensitivity: 0.2,
             maxZoom: 3,
@@ -128,14 +134,11 @@ export class HomeComponent implements AfterViewInit, OnInit {
         // I apply the layout to all nodes and edges, except plugins nodes
         this.graph.elements('*[kind != "plugin"]').layout({
             name: "tidytree",
-            // horizontalSpacing: this.maxSpacingFactor*50,
-            horizontalSpacing: (3 * 20) + 30,
+            horizontalSpacing: (this.maxSpacingFactor * 20) + 30,
             verticalSpacing: 50,
             direction: 'LR',
             spacingFactor: 1.2,
-            nodeDimensionsIncludeLabels: true,
-            // animate: true
-            // layerHeight: 50,
+            nodeDimensionsIncludeLabels: true
         }).run();
 
         // Manually position plugin nodes, relative to their "parent"
@@ -184,34 +187,135 @@ export class HomeComponent implements AfterViewInit, OnInit {
     tooltips() {
         // On node click show tip
         this.graph.nodes().forEach((n: any) => {
-            n.on('click', (ev: any) => {
-                let div = document.createElement('div');
-                div.innerHTML = `<div>
-                    <p class="card-header">` + n.data('name') + `</p>
-                    </div>`;
+            let tip: any;
+            if (!['plugin', 'target'].includes(n.data('kind'))) {
+                const meta = n.data('meta');
+                n.on('mouseover', (ev: any) => {
+                    let div = document.createElement('div');
+                    div.innerHTML = `<div class="tip">` +
+                        this.getTipInfo(n.data('kind'), n.data('meta'))
+                        + `</div>`;
 
-                const tip = n.popper({
-                    content: div
+                    tip = n.popper({
+                        content: div
+                    });
+                    tip.show();
+                    n.data('tippy', tip);
+                    this.tippys.push(tip);
+                    this.graphDOM.classList.add('hand');
                 });
-                tip.show();
-                n.data('tippy', tip);
-                this.tippys.push(tip);
+
+                n.on('mouseout', (ev: any) => {
+                    tip.destroy();
+                    this.graphDOM.classList.remove('hand');
+                });
+            }
+
+            n.on('vclick', (ev: any) => {
+                if (tip) {
+                    tip.destroy();
+                }
+                this.dialog.open(DetailsDialog, {
+                    height: '70vh',
+                    width: '70vw',
+                    data: {
+                        kind: n.data('kind'),
+                        key: n.data('url'),
+                        meta: n.data('meta')
+                    }
+                });
             });
         });
 
         // Destroy Tips when dragging the graph
-        this.graph.on('dragpan', (ev: any) => {
-            this.destroyTips();
-        });
+        // this.graph.on('dragpan', (ev: any) => {
+        //     this.destroyAllTips();
+        // });
     }
 
-    destroyTips() {
+    destroyAllTips() {
         this.tippys.forEach((t: any) => {
             t.hide();
             setTimeout(() => {
                 t.destroy();
             }, 1000);
         });
+    }
+
+    getTipInfo(kind: string, meta: any) {
+        let html: string = '';
+        switch (kind) {
+            case 'service':
+                html += '<p><strong>' + meta.name + '</strong></p>';
+                if (meta.desc) {
+                    html += '<p><em>' + meta.desc + '</em></p>';
+                }
+                if (meta.hosts) {
+                    html += '<p>Hosts: </p><ul>';
+                    meta.hosts.forEach((host: any) => {
+                        html += '<li>' + host + '</li>';
+                    });
+                    html += '</ul>'
+                }
+                break;
+            case 'route':
+                html += '<p><strong>' + meta.name + '</strong></p>';
+                if (meta.desc) {
+                    html += '<p><em>' + meta.desc + '</em></p>';
+                }
+                if (meta.methods) {
+                    html += '<p>Methods: ' + meta.methods.join(', ') + '</p>';
+                }
+                if (meta.uri) {
+                    html += '<p>URI: ' + meta.uri + '</p>';
+                }
+                if (meta.uris) {
+                    html += '<p>URIs: </p><ul>';
+                    meta.uris.forEach((uri: any) => {
+                        html += '<li>' + uri + '</li>';
+                    });
+                    html += '</ul>'
+                }
+                if (meta.status === 1 || meta.status === 0) {
+                    const ss = meta.status === 1 ? '<span class="status-ok">Enabled</span>' : '<span class="status-fail">Disabled</span>';
+                    html += '<p>Status: ' + ss + '</p>';
+                }
+                if (meta.priority) {
+                    html += '<p>Priority: ' + meta.priority + '</p>';
+                }
+                break;
+            case 'upstream':
+                if (meta.name) {
+                    html += '<p><strong>' + meta.name + '</strong></p>';
+                }
+                if (meta.desc) {
+                    html += '<p><em>' + meta.desc + '</em></p>';
+                }
+                if (meta.type) {
+                    html += '<p>Type: ' + meta.type + '</p>';
+                }
+                if (meta.scheme) {
+                    html += '<p>Scheme: ' + meta.scheme + '</p>';
+                }
+                if (meta.nodes) {
+                    html += '<p>Nodes: </p><ul>';
+                    meta.nodes.forEach((nod: any) => {
+                        html += '<li>' + nod.host + ':' + nod.port + '</li>';
+                    });
+                    html += '</ul>'
+                }
+                if (meta.checks){
+                    if (meta.checks.passive){
+                        html += '<p>Health checks — passive: enabled</p>';
+                    }
+                    if (meta.checks.active){
+                        html += '<p>Health checks — active: enabled</p>';
+                    }
+                }
+                break;
+        }
+
+        return html;
     }
 
     /**
@@ -412,6 +516,7 @@ export class HomeComponent implements AfterViewInit, OnInit {
                     id: nR1,
                     name: route.value.name,
                     kind: 'route',
+                    status: route.value.status === 1 ? true : false,
                     meta: route.value,
                     url: this.globals.APISIX_URL + route.key
                 }
@@ -689,7 +794,7 @@ export class HomeComponent implements AfterViewInit, OnInit {
                         positionFactor: plugin.positionFactor,
                         positionSquare: plugin.positionSquare,
                         kind: 'plugin',
-                        state: plugin.status,
+                        status: plugin.status,
                         meta: plugin.metadata,
                         url: plugin.url
                     }
@@ -824,7 +929,7 @@ export class HomeComponent implements AfterViewInit, OnInit {
 
     async reloadData() {
         // destroy graph
-        this.destroyTips();
+        this.destroyAllTips();
         this.graph.destroy();
         // reset vars
         this.loading = true;
@@ -869,3 +974,22 @@ export class HomeComponent implements AfterViewInit, OnInit {
     }
 }
 
+
+/**
+ * Details Dialog Component
+ */
+@Component({
+    selector: 'details-dialog',
+    templateUrl: 'details-dialog.html',
+    imports: [MatDialogModule, MatButtonModule, MatIconModule],
+    changeDetection: ChangeDetectionStrategy.OnPush
+})
+export class DetailsDialog {
+    jsonHtml: any;
+    url: string;
+
+    constructor(@Inject(MAT_DIALOG_DATA) public data: any, private jsonUtils: JsonService) {
+        this.url = this.data.key;
+        this.jsonHtml = this.jsonUtils.jsonViewer(this.data.meta, true);
+    }
+}
