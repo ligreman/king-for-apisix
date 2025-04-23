@@ -1,20 +1,29 @@
 <div class="container">
     <div id="services">
         <div class="services-header">
-            <span class="title">Filter by service or route</span>
+            <div>
+                <span class="title">Filter by service or route</span>
 
-            <mat-button-toggle-group name="filters" aria-label="Filters" [formControl]="showFilter"
-                                     (change)="changeFilter()" [hideMultipleSelectionIndicator]="true" multiple>
-                <mat-button-toggle value="service" class="toggler"
-                                   [matTooltip]="showServices ? 'Hide Service filters' : 'Show Service filters'">S
-                </mat-button-toggle>
-                <mat-button-toggle value="route" class="toggler"
-                                   [matTooltip]="showServices ? 'Hide Route filters' : 'Show Route filters'">R
-                </mat-button-toggle>
-            </mat-button-toggle-group>
-            <button mat-icon-button (click)="cleanFilters()" matTooltip="Clean filters">
-                <mat-icon>cleaning_services</mat-icon>
-            </button>
+                <div class="toggler-group">
+                    <mat-button-toggle-group name="filters" aria-label="Filters"
+                                             [formControl]="showFilter"
+                                             (change)="changeFilter()" [hideMultipleSelectionIndicator]="true" multiple>
+                        <mat-button-toggle value="service" class="toggler"
+                                           [matTooltip]="showServices ? 'Hide Service filters' : 'Show Service filters'">
+                            Services
+                        </mat-button-toggle>
+                        <mat-button-toggle value="route" class="toggler"
+                                           [matTooltip]="showServices ? 'Hide Route filters' : 'Show Route filters'">
+                            Routers
+                        </mat-button-toggle>
+                    </mat-button-toggle-group>
+                </div>
+            </div>
+            <div class="toggler-button">
+                <button mat-icon-button (click)="cleanFilters()" matTooltip="Clean filters">
+                    <mat-icon>cleaning_services</mat-icon>
+                </button>
+            </div>
         </div>
 
         <mat-selection-list #seloptions class="sel-list" [formControl]="selection" name="selection"

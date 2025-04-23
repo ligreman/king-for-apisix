@@ -64,12 +64,22 @@ p.title {
     box-shadow: var(--mat-sys-level4);
     display: flex;
     flex-direction: row;
-    align-items: center;
+    //align-items: center;
     padding: 12px 8px;
 }
 
 .services-header .title {
     flex: 50;
+}
+
+.services-header .toggler-button {
+    flex: auto;
+    text-align: end;
+}
+
+.services-header .toggler-group {
+    margin-top: 5px;
+    text-align: center;
 }
 
 .sel-list {

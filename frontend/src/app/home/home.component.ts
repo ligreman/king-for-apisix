@@ -216,8 +216,8 @@ export class HomeComponent implements AfterViewInit, OnInit {
                     tip.destroy();
                 }
                 this.dialog.open(DetailsDialog, {
-                    height: '70vh',
-                    width: '70vw',
+                    minHeight: '70vh',
+                    minWidth: '70vw',
                     data: {
                         kind: n.data('kind'),
                         key: n.data('url'),

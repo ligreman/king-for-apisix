@@ -101,7 +101,10 @@ export class AppComponent implements OnInit {
     }
 
     help() {
-        const dialogRef = this.dialog.open(HelpDialog);
+        const dialogRef = this.dialog.open(HelpDialog, {
+            minHeight: '70vh',
+            minWidth: '70vw',
+        });
 
         dialogRef.afterClosed().subscribe(() => {
         });
