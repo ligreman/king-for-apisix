@@ -1,6 +1,6 @@
 # KApisix - King for [Apisix API Gateway](https://apisix.apache.org)
 
-King UI companion for Apisix API Gateway.
+KApisix is an UI companion for Apisix API Gateway.
 
 [![KApisix graph view](https://raw.githubusercontent.com/ligreman/king-for-apisix/main/docs/images/shot_1.jpg)](https://ligreman.github.io/king-for-apisix)
 
