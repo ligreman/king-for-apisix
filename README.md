@@ -23,8 +23,6 @@ _KApisix is not official, and does not have any affiliation with [Apisix](https:
 * Overview an Apisix deployment in an interactive graph interface.
 * Use Apisix Control API. No connection needed to the Admin Api.
 
-See some screenshots in the wiki: https://github.com/ligreman/king/wiki/Screenshots-of-features
-
 ## Compatibility
 
 KApisix has been developed to be compatible with Apisix API Gateway 3.12.x version and newer. It may be compatible backwards, but it has not been tested.
@@ -37,6 +35,15 @@ KApisix has been developed to be compatible with Apisix API Gateway 3.12.x versi
 ## Installation
 
 ### Docker
+
+KApisix is distributed as Docker images. You cand find them in the packages of this repository.
+
+### Generate your own Docker image
+
+Just can just use the Dockerfile included to generate a Docker image. This way you can make changes into the project and build your own image.
+
+`docker build -t "NAME:Dockerfile"`
+
 
 ### Manual installation
 
@@ -80,9 +87,16 @@ private _APISIX_URL = 'http://apisix:port/control-api';
 
 ### Prepare environment
 
-Clone the repository to your local machine and install npm dependencies:
+Install NodeJS version >= 20. [Official NodeJS installation instructions](https://nodejs.org/en/download).
+
+Clone the repository to your local machine and install npm dependencies both for the api and the frontend:
 
 ```
+git clone https://github.com/ligreman/king-for-apisix.git
+cd king-for-apisix/api
+npm install
+
+cd ../frontend
 npm install
 ```
 
