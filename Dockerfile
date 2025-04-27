@@ -2,7 +2,7 @@ ARG ALPINE_VERSION=3.16
 ARG NODE_VERSION=22
 ARG KAPISIX_VERSION=1.0.0
 
-LABEL org.opencontainers.image.source=https://github.com/ligreman/kapisix
+LABEL org.opencontainers.image.source=https://github.com/ligreman/king-for-apisix
 LABEL org.opencontainers.image.description="KApisix Docker image v${KAPISIX_VERSION}"
 LABEL org.opencontainers.image.licenses="GPL-3.0"
 
