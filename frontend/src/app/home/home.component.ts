@@ -76,7 +76,7 @@ export class HomeComponent implements AfterViewInit, OnInit {
     pluginList: any = [];
     maxSpacingFactor: number = 1;
     tippys: any[] = [];
-    graphDOM:any;
+    graphDOM: any;
 
     constructor(private api: ApiService, private toast: ToastService, private globals: GlobalsService, private jsonUtils: JsonService) {
     }
@@ -209,6 +209,15 @@ export class HomeComponent implements AfterViewInit, OnInit {
                     tip.destroy();
                     this.graphDOM.classList.remove('hand');
                 });
+            } else {
+                // Just only the hand pointer for targets and plugins
+                n.on('mouseover', (ev: any) => {
+                    this.graphDOM.classList.add('hand');
+                });
+
+                n.on('mouseout', (ev: any) => {
+                    this.graphDOM.classList.remove('hand');
+                });
             }
 
             n.on('vclick', (ev: any) => {
@@ -226,11 +235,6 @@ export class HomeComponent implements AfterViewInit, OnInit {
                 });
             });
         });
-
-        // Destroy Tips when dragging the graph
-        // this.graph.on('dragpan', (ev: any) => {
-        //     this.destroyAllTips();
-        // });
     }
 
     destroyAllTips() {
@@ -304,11 +308,11 @@ export class HomeComponent implements AfterViewInit, OnInit {
                     });
                     html += '</ul>'
                 }
-                if (meta.checks){
-                    if (meta.checks.passive){
+                if (meta.checks) {
+                    if (meta.checks.passive) {
                         html += '<p>Health checks — passive: enabled</p>';
                     }
-                    if (meta.checks.active){
+                    if (meta.checks.active) {
                         html += '<p>Health checks — active: enabled</p>';
                     }
                 }
